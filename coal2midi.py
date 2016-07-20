@@ -60,6 +60,7 @@ class Coal2Midi(object):
                 #mag_to_attack(d['magnitude']),  # attack
                 0.5  # duration, in beats
             ])
+        return note_list
 
     # def week_magic(day):
     #     day_of_week = day.weekday()
@@ -78,7 +79,7 @@ class Coal2Midi(object):
 
         timed_data = []
 
-        mymidi = MIDITime(80, 'myfile.mid', 45, 2, 5)
+        self.mymidi = MIDITime(80, 'coaltest.mid', 45, 2, 5)
 
         # first_date = filtered_rows[0]
 
@@ -87,8 +88,8 @@ class Coal2Midi(object):
             # print year_start
             week_start_date = year_start + timedelta(weeks=1 * (int(r['Week']) - 1))
             print week_start_date
-            days_since_epoch = mymidi.days_since_epoch(week_start_date)
-            beat = mymidi.beat(days_since_epoch)
+            days_since_epoch = self.mymidi.days_since_epoch(week_start_date)
+            beat = self.mymidi.beat(days_since_epoch)
             # mydict = {'days_since_epoch': int(float(row[0])), 'CoalProdMillions': float(r['CoalProd'] / 1000000)}
             timed_data.append({
                 'days_since_epoch': days_since_epoch,
@@ -99,14 +100,14 @@ class Coal2Midi(object):
 
         note_list = self.make_notes(timed_data, 'CoalProdMillions')
         # Add a track with those notes
-        mymidi.add_track(note_list)
+        self.mymidi.add_track(note_list)
 
         # Output the .mid file
-        mymidi.save_midi()
+        self.mymidi.save_midi()
 
     def mag_to_pitch_tuned(self, magnitude):
         # Where does this data point sit in the domain of your data? (I.E. the min magnitude is 3, the max in 5.6). In this case the optional 'True' means the scale is reversed, so the highest value will return the lowest percentage.
-        scale_pct = mymidi.linear_scale_pct(10, 25, magnitude)
+        scale_pct = self.mymidi.linear_scale_pct(10, 25, magnitude)
 
         # Another option: Linear scale, reverse order
         # scale_pct = mymidi.linear_scale_pct(3, 5.7, magnitude, True)
@@ -118,16 +119,16 @@ class Coal2Midi(object):
         c_major = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
 
         #Find the note that matches your data point
-        note = mymidi.scale_to_note(scale_pct, c_major)
+        note = self.mymidi.scale_to_note(scale_pct, c_major)
 
         #Translate that note to a MIDI pitch
-        midi_pitch = mymidi.note_to_midi_pitch(note)
+        midi_pitch = self.mymidi.note_to_midi_pitch(note)
 
         return midi_pitch
 
     def mag_to_attack(self, magnitude):
         # Where does this data point sit in the domain of your data? (I.E. the min magnitude is 3, the max in 5.6). In this case the optional 'True' means the scale is reversed, so the highest value will return the lowest percentage.
-        scale_pct = mymidi.linear_scale_pct(10, 25, magnitude)
+        scale_pct = self.mymidi.linear_scale_pct(10, 25, magnitude)
 
         #max_attack = 10
 
