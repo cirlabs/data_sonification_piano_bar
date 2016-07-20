@@ -15,7 +15,7 @@ class Coal2Midi(object):
     max_value = 5.7
 
     tempo = 120
-    min_pitch = 25
+    min_pitch = 40
     max_pitch = 88
 
     min_attack = 30
@@ -24,7 +24,7 @@ class Coal2Midi(object):
     min_duration = 1
     max_duration = 5
 
-    seconds_per_year = 7
+    seconds_per_year = 45
 
     c_major = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
     c_minor = ['C', 'D', 'Eb', 'F', 'G', 'Ab', 'Bb']
@@ -46,6 +46,12 @@ class Coal2Midi(object):
 
     def remove_weeks(self, csv_obj):
         return [r for r in csv_obj if r['Week'] not in [1, 27, 52, 53]]
+
+    def get_data_range(self, data_list, attribute_name):
+        minimum = min([float(d[attribute_name]) for d in data_list])
+        maximum = max([float(d[attribute_name]) for d in data_list])
+        print minimum, maximum
+        return [minimum, maximum]
 
     def make_notes(self, data_timed, data_key):
         note_list = []
@@ -77,9 +83,12 @@ class Coal2Midi(object):
         raw_data = self.read_csv('data/coal_prod_1984_2016_weeks_summed.csv')
         filtered_data = self.remove_weeks(raw_data)
 
+        self.minimum = self.get_data_range(filtered_data, 'CoalProd')[0] / 1000000.0
+        self.maximum = self.get_data_range(filtered_data, 'CoalProd')[1] / 1000000.0
+
         timed_data = []
 
-        self.mymidi = MIDITime(80, 'coaltest.mid', 45, 2, 5)
+        self.mymidi = MIDITime(self.tempo, 'coaltest.mid', self.seconds_per_year, self.base_octave, self.octave_range)
 
         # first_date = filtered_rows[0]
 
@@ -87,7 +96,7 @@ class Coal2Midi(object):
             year_start = datetime(int(r['Year']), 1, 1).date()
             # print year_start
             week_start_date = year_start + timedelta(weeks=1 * (int(r['Week']) - 1))
-            print week_start_date
+            # print week_start_date
             days_since_epoch = self.mymidi.days_since_epoch(week_start_date)
             beat = self.mymidi.beat(days_since_epoch)
             # mydict = {'days_since_epoch': int(float(row[0])), 'CoalProdMillions': float(r['CoalProd'] / 1000000)}
@@ -107,7 +116,8 @@ class Coal2Midi(object):
 
     def mag_to_pitch_tuned(self, magnitude):
         # Where does this data point sit in the domain of your data? (I.E. the min magnitude is 3, the max in 5.6). In this case the optional 'True' means the scale is reversed, so the highest value will return the lowest percentage.
-        scale_pct = self.mymidi.linear_scale_pct(10, 25, magnitude)
+        # print magnitude
+        scale_pct = self.mymidi.linear_scale_pct(0, self.maximum, magnitude)
 
         # Another option: Linear scale, reverse order
         # scale_pct = mymidi.linear_scale_pct(3, 5.7, magnitude, True)
@@ -128,7 +138,7 @@ class Coal2Midi(object):
 
     def mag_to_attack(self, magnitude):
         # Where does this data point sit in the domain of your data? (I.E. the min magnitude is 3, the max in 5.6). In this case the optional 'True' means the scale is reversed, so the highest value will return the lowest percentage.
-        scale_pct = self.mymidi.linear_scale_pct(10, 25, magnitude)
+        scale_pct = self.mymidi.linear_scale_pct(0, self.maximum, magnitude)
 
         #max_attack = 10
 
