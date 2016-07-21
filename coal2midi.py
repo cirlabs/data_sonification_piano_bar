@@ -143,7 +143,7 @@ class Coal2Midi(object):
 
         #max_attack = 10
 
-        adj_attack = (1 - scale_pct)*max_attack + 70
+        adj_attack = (1 - scale_pct) * max_attack + 70
         #adj_attack = 100
 
         return adj_attack
