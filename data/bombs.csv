@@ -1,0 +1,185 @@
+Testnum,Operation,Test,Date,Yieldnum
+1,Trinity,Trinity,7/16/1945,21000
+2,Crossroads,Able,7/1/1946,21000
+3,Crossroads,Baker,7/25/1946,21000
+4,Sandstone,X-Ray,4/15/1948,37000
+5,Sandstone,Yoke,5/1/1948,49000
+6,Sandstone,Zebra,5/15/1948,18000
+7,Ranger,Able,1/27/1951,1000
+8,Ranger,Baker,1/28/1951,8000
+9,Ranger,Easy,2/1/1951,1000
+10,Ranger,Baker-2,2/2/1951,8000
+11,Ranger,Fox,2/6/1951,22000
+12,Greenhouse,Dog,4/8/1951,81000
+13,Greenhouse,Easy,4/21/1951,47000
+14,Greenhouse,George,5/9/1951,225000
+15,Greenhouse,Item,5/25/1951,45500
+16,Buster Jangle,Able,10/22/1951,100
+17,Buster Jangle,Baker,10/28/1951,3500
+18,Buster Jangle,Charlie,10/30/1951,14000
+19,Buster Jangle,Dog,11/1/1951,21000
+20,Buster Jangle,Easy,11/5/1951,31000
+21,Buster Jangle,Sugar,11/19/1951,1200
+23,Tumbler,Able,4/1/1952,1000
+24,Tumbler,Baker                                ,4/15/1952,1000
+25,Tumbler,Charlie                                ,4/22/1952,31000
+26,Tumbler,Dog                                    ,5/1/1952,19000
+27,Tumbler,Easy                                   ,5/7/1952,12000
+28,Tumbler,Fox                                    ,5/25/1952,11000
+29,Tumbler,George                                 ,6/1/1952,15000
+30,Tumbler,How                                    ,6/5/1952,14000
+31,Ivy,Mike,11/1/1952,10400000
+32,Ivy,King,11/16/1952,500000
+33,Upshot-Knothole,Annie                                  ,3/17/1953,16000
+34,Upshot-Knothole,Nancy                                  ,3/24/1953,24000
+35,Upshot-Knothole,Ruth                                   ,3/31/1953,200
+36,Upshot-Knothole,Dixie                                  ,4/6/1953,11000
+37,Upshot-Knothole,Ray                                    ,4/11/1953,200
+38,Upshot-Knothole,Badger                                 ,4/18/1953,23000
+39,Upshot-Knothole,Simon                                  ,4/25/1953,43000
+40,Upshot-Knothole,Encore                                 ,5/8/1953,27000
+41,Upshot-Knothole,Harry                                  ,5/19/1953,32000
+42,Upshot-Knothole,Grable,5/25/1953,15000
+43,Upshot-Knothole,Climax                                 ,6/4/1953,61000
+44,Castle,Bravo,3/1/1954,15000000
+45,Castle,Romeo                                  ,3/27/1954,11000000
+46,Castle,Koon                                   ,4/7/1954,110000
+47,Castle,Union                                  ,4/26/1954,6900000
+48,Castle,Yankee                                 ,5/5/1954,13500000
+49,Castle,Nectar                                 ,5/14/1954,1690000
+50,Teapot,Wasp                                   ,2/18/1955,1000
+51,Teapot,Moth                                   ,2/22/1955,2000
+52,Teapot,Tesla                                  ,3/1/1955,7000
+53,Teapot,Turk                                   ,3/7/1955,43000
+54,Teapot,Hornet,3/12/1955,4000
+55,Teapot,Bee,3/22/1955,8000
+57,Teapot,Apple-1,3/29/1955,14000
+58,Teapot,Wasp Prime,3/29/1955,3000
+59,Teapot,HA,4/6/1955,3000
+60,Teapot,Post,4/9/1955,2000
+61,Teapot,MET,4/15/1955,22000
+62,Teapot,Apple-2,5/5/1955,29000
+63,Teapot,Zucchini,5/15/1955,28000
+64,Wigwam,Wigwam,5/14/1955,30000
+69,Redwing,Lacrosse,5/5/1956,40000
+70,Redwing,Cherokee,5/21/1956,3800000
+71,Redwing,Zuni,5/28/1956,3500000
+72,Redwing,Yuma,5/28/1956,190
+73,Redwing,Erie,5/31/1956,14900
+74,Redwing,Seminole,6/6/1956,13700
+75,Redwing,Flathead,6/12/1956,365000
+76,Redwing,Blackfoot,6/12/1956,8000
+77,Redwing,Kickapoo,6/14/1956,1490
+78,Redwing,Osage,6/16/1956,1700
+79,Redwing,Inca,6/22/1956,15200
+80,Redwing,Dakota,6/26/1956,1100000
+81,Redwing,Mohawk,7/3/1956,360000
+82,Redwing,Apache,7/9/1956,1850000
+83,Redwing,Navajo,7/11/1956,4500000
+84,Redwing,Tewa,7/21/1956,5000000
+85,Redwing,Huron,7/22/1956,250000
+87,Plumbob,Boltzmann,5/28/1957,12000
+88,Plumbob,Franklin,5/29/1957,140
+89,Plumbob,Lassen,5/30/1957,1
+90,Plumbob,Wilson,5/31/1957,10000
+91,Plumbob,Priscilla,6/1/1957,37000
+93,Plumbob,Hood,6/3/1957,74000
+94,Plumbob,Diablo,6/4/1957,17000
+95,Plumbob,John,6/5/1957,2000
+96,Plumbob,Kepler,6/6/1957,10000
+97,Plumbob,Owens,6/7/1957,9700
+99,Plumbob,Stokes,6/8/1957,19000
+101,Plumbob,Shasta,6/9/1957,17000
+102,Plumbob,Doppler,6/10/1957,11000
+104,Plumbob,Franklin Prime,6/11/1957,4700
+105,Plumbob,Smoky,6/12/1957,44000
+106,Plumbob,Galileo,6/13/1957,11000
+107,Plumbob,Wheeler,6/14/1957,197
+108,Plumbob,Coulomb-B,6/15/1957,300
+109,Plumbob,Laplace,6/16/1957,1000
+110,Plumbob,Fizeau,6/17/1957,11000
+111,Plumbob,Newton,6/18/1957,12000
+113,Plumbob,Whitney,6/19/1957,19000
+114,Plumbob,Charleston,6/20/1957,12000
+115,Plumbob,Morgan,6/21/1957,8000
+117,Project 58,Coulomb-C,,500
+120,Hardtack1,Yucca,4/28/1958,1700
+121,Hardtack1,Cactus,5/6/1958,18000
+122,Hardtack1,Fir,5/12/1958,1360000
+123,Hardtack1,Butternut,5/12/1958,81000
+124,Hardtack1,Koa,5/13/1958,1370000
+125,Hardtack1,Wahoo,5/16/1958,9000
+126,Hardtack1,Holly,5/21/1958,5900
+127,Hardtack1,Nutmeg,5/22/1958,25100
+128,Hardtack1,Yellowwood,5/26/1958,330000
+129,Hardtack1,Magnolia,5/27/1958,57000
+130,Hardtack1,Tobacco,5/31/1958,11600
+131,Hardtack1,Sycamore,5/31/1958,92000
+132,Hardtack1,Rose,6/3/1958,15000
+133,Hardtack1,Umbrella,6/9/1958,8000
+134,Hardtack1,Maple,6/11/1958,213000
+135,Hardtack1,Aspen,6/15/1958,319000
+136,Hardtack1,Walnut,6/15/1958,1450000
+137,Hardtack1,Linden,6/18/1958,11000
+138,Hardtack1,Redwood,6/28/1958,412000
+139,Hardtack1,Elder,6/28/1958,880000
+140,Hardtack1,Oak,6/29/1958,8900000
+141,Hardtack1,Hickory,6/29/1958,14000
+142,Hardtack1,Sequoia,7/2/1958,5200
+143,Hardtack1,Cedar,7/3/1958,220000
+144,Hardtack1,Dogwood,7/6/1958,397000
+145,Hardtack1,Poplar,7/12/1958,9300000
+147,Hardtack1,Pisonia,7/18/1958,255000
+148,Hardtack1,Juniper,7/22/1958,65000
+149,Hardtack1,Olive,7/23/1958,202000
+150,Hardtack1,Pine,7/27/1958,2000000
+151,Hardtack1,Teak (Operation Newsreel),7/31/1958,3800000
+153,Hardtack1,Orange,8/11/1958,3800000
+154,Hardtack1,Fig,8/18/1958,20
+155,Argus,Argus I,8/27/1958,1700
+156,Argus,Argus II,8/30/1958,1700
+157,Argus,Argus III,9/6/1958,1700
+165,HardtackII,Mora,9/29/1958,2000
+166,HardtackII,Hidalgo,10/5/1958,77
+169,HardtackII,Quay,10/10/1958,79
+170,HardtackII,Lea,10/13/1958,1400
+178,HardtackII,Socorro,10/22/1958,6000
+181,HardtackII,Rushmore,10/22/1958,188
+182,HardtackII,Catron,10/24/1958,21
+183,HardtackII,Juno,10/24/1958,2
+184,HardtackII,Ceres,10/26/1958,1
+185,HardtackII,Sanford,10/26/1958,4900
+186,HardtackII,De Baca,10/26/1958,2200
+187,HardtackII,Chavez ,10/27/1958,1
+190,HardtackII,Humboldt,10/29/1958,8
+191,HardtackII,Santa Fe,10/30/1958,1300
+227,Dominic,Adobe,4/25/1962,190000
+228,Dominic,Aztec,4/27/1962,410000
+230,Dominic,Arkansas,5/2/1962,1090000
+231,Dominic,Questa,5/4/1962,670000
+234,Dominic,Yukon,5/8/1962,100000
+235,Dominic,Mesilla,5/9/1962,100000
+237,Dominic,Muskegon,5/11/1962,50000
+239,Dominic,Encino,5/12/1962,500000
+241,Dominic,Swanee,5/14/1962,97000
+243,Dominic,Chetco,5/19/1962,73000
+245,Dominic,Tanana,5/25/1962,2600
+246,Dominic,Nambe,5/27/1962,43000
+249,Dominic,Alma,6/8/1962,782000
+250,Dominic,Truckee,6/9/1962,210000
+251,Dominic,Yeso,6/10/1962,3000000
+252,Dominic,Harlem,6/12/1962,1200000
+254,Dominic,Rinconada,6/15/1962,800000
+255,Dominic,Dulce,6/17/1962,52000
+256,Dominic,Petit,6/19/1962,2200
+258,Dominic,Otowi,6/22/1962,81500
+259,Dominic,Bighorn,6/27/1962,7650000
+262,Dominic,Bluestone,6/30/1962,1270000
+266,Fishbowl,Starfish Prime,7/8/1962,1400000
+267,Dominic,Sunset,7/11/1962,1000000
+268,Dominic,Pamlico,7/12/1962,3880000
+280,Dominic,Androscoggin,10/2/1962,75000
+282,Dominic,Bumping,10/6/1962,11300
+286,Dominic,Chama,10/18/1962,1590000
+291,Dominic,Calamity,10/27/1962,800000
+292,Dominic,Housatonic,10/30/1962,8300000
