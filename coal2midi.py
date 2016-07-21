@@ -6,6 +6,10 @@ from miditime.miditime import MIDITime
 
 
 class Coal2Midi(object):
+    ''' Adapted from Jordan Wirfs-Brock's awesome coal production sonification.
+    Post here: http://insideenergy.org/2016/05/03/listen-to-u-s-coal-production-fall-off-a-cliff/
+    Code and data here: https://github.com/InsideEnergy/Data-for-stories/tree/master/20160503-coal-production-sonification
+    '''
 
     # tz = get_default_timezone()
     epoch = datetime(1970, 1, 1)
