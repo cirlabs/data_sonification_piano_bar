@@ -1,8 +1,6 @@
-import os
 import csv
 from datetime import datetime, timedelta
 from miditime.miditime import MIDITime
-# from django.utils.timezone import make_aware, get_default_timezone
 
 
 class Coal2Midi(object):
@@ -11,16 +9,10 @@ class Coal2Midi(object):
     Code and data here: https://github.com/InsideEnergy/Data-for-stories/tree/master/20160503-coal-production-sonification
     '''
 
-    # tz = get_default_timezone()
-    epoch = datetime(1970, 1, 1)
+    epoch = datetime(1970, 1, 1)  # TODO: Allow this to override the midtime epoch
     mymidi = None
 
-    min_value = 0
-    max_value = 5.7
-
     tempo = 120
-    min_pitch = 40
-    max_pitch = 88
 
     min_attack = 30
     max_attack = 255
@@ -52,6 +44,7 @@ class Coal2Midi(object):
         return [r for r in csv_obj if int(r['Week']) not in [53]]
 
     def get_data_range(self, data_list, attribute_name):
+        data_list = list(data_list)  # If the data is still a CSV object, once you loop through it you'll get rewind issues. So coercing to list.
         minimum = min([float(d[attribute_name]) for d in data_list])
         maximum = max([float(d[attribute_name]) for d in data_list])
         return [minimum, maximum]
@@ -84,38 +77,6 @@ class Coal2Midi(object):
             return week_start_date + timedelta(days=(desired_day_num - week_start_day))
         return week_start_date
 
-    def csv_to_miditime(self):
-        raw_data = self.read_csv('data/coal_prod_1984_2016_weeks_summed.csv')
-        filtered_data = self.remove_weeks(raw_data)
-
-        self.minimum = self.get_data_range(filtered_data, 'CoalProd')[0] / 1000000.0
-        self.maximum = self.get_data_range(filtered_data, 'CoalProd')[1] / 1000000.0
-
-        timed_data = []
-
-        self.mymidi = MIDITime(self.tempo, 'coaltest.mid', self.seconds_per_year, self.base_octave, self.octave_range)
-
-        first_day = self.map_week_to_day(filtered_data[0]['Year'], filtered_data[0]['Week'])
-
-        for r in filtered_data:
-            week_start_date = self.map_week_to_day(r['Year'], r['Week'], first_day.weekday())
-            print r['Year'], week_start_date
-            days_since_epoch = self.mymidi.days_since_epoch(week_start_date)
-            beat = self.mymidi.beat(days_since_epoch)
-            # mydict = {'days_since_epoch': int(float(row[0])), 'CoalProdMillions': float(r['CoalProd'] / 1000000)}
-            timed_data.append({
-                'days_since_epoch': days_since_epoch,
-                'beat': beat,
-                'CoalProdMillions': float(r['CoalProd']) / 1000000.0
-            })
-
-        note_list = self.make_notes(timed_data, 'CoalProdMillions')
-        # Add a track with those notes
-        self.mymidi.add_track(note_list)
-
-        # Output the .mid file
-        self.mymidi.save_midi()
-
     def data_to_pitch_tuned(self, datapoint):
         # Where does this data point sit in the domain of your data? (I.E. the min magnitude is 3, the max in 5.6). In this case the optional 'True' means the scale is reversed, so the highest value will return the lowest percentage.
         scale_pct = self.mymidi.linear_scale_pct(0, self.maximum, datapoint)
@@ -147,6 +108,41 @@ class Coal2Midi(object):
         #adj_attack = 100
 
         return adj_attack
+
+    def csv_to_miditime(self):
+        raw_data = self.read_csv('data/coal_prod_1984_2016_weeks_summed.csv')
+        filtered_data = self.remove_weeks(raw_data)
+
+        self.minimum = self.get_data_range(filtered_data, 'CoalProd')[0] / 1000000.0
+        self.maximum = self.get_data_range(filtered_data, 'CoalProd')[1] / 1000000.0
+
+        timed_data = []
+
+        self.mymidi = MIDITime(self.tempo, 'coaltest.mid', self.seconds_per_year, self.base_octave, self.octave_range)
+
+        # Get the first day in the dataset, so we can use it's day of the week to anchor our other weekly data.
+        first_day = self.map_week_to_day(filtered_data[0]['Year'], filtered_data[0]['Week'])
+
+        for r in filtered_data:
+            # Convert the week to a date in that week
+            week_start_date = self.map_week_to_day(r['Year'], r['Week'], first_day.weekday())
+            # To get your date into an integer format, convert that date into the number of days since Jan. 1, 1970
+            days_since_epoch = self.mymidi.days_since_epoch(week_start_date)
+            # Convert that integer date into a beat
+            beat = self.mymidi.beat(days_since_epoch)
+
+            timed_data.append({
+                'days_since_epoch': days_since_epoch,
+                'beat': beat,
+                'CoalProdMillions': float(r['CoalProd']) / 1000000.0
+            })
+
+        note_list = self.make_notes(timed_data, 'CoalProdMillions')
+        # Add a track with those notes
+        self.mymidi.add_track(note_list)
+
+        # Output the .mid file
+        self.mymidi.save_midi()
 
 if __name__ == "__main__":
     mymidi = Coal2Midi()
