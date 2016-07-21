@@ -24,7 +24,7 @@ class Coal2Midi(object):
     min_duration = 1
     max_duration = 5
 
-    seconds_per_year = 45
+    seconds_per_year = 26
 
     c_major = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
     c_minor = ['C', 'D', 'Eb', 'F', 'G', 'Ab', 'Bb']
@@ -45,13 +45,15 @@ class Coal2Midi(object):
         return csv.DictReader(csv_file, delimiter=',', quotechar='"')
 
     def remove_weeks(self, csv_obj):
-        return [r for r in csv_obj if r['Week'] not in [1, 27, 52, 53]]
+        return [r for r in csv_obj if int(r['Week']) not in [53]]
 
     def get_data_range(self, data_list, attribute_name):
         minimum = min([float(d[attribute_name]) for d in data_list])
         maximum = max([float(d[attribute_name]) for d in data_list])
-        print minimum, maximum
         return [minimum, maximum]
+
+    def round_to_quarter_beat(self, input):
+        return round(input * 4) / 4
 
     def make_notes(self, data_timed, data_key):
         note_list = []
@@ -60,24 +62,23 @@ class Coal2Midi(object):
 
         for d in data_timed:
             note_list.append([
-                d['beat'] - start_time,
-                self.mag_to_pitch_tuned(d[data_key]),
+                self.round_to_quarter_beat(d['beat'] - start_time),
+                self.data_to_pitch_tuned(d[data_key]),
                 100,
                 #mag_to_attack(d['magnitude']),  # attack
-                0.5  # duration, in beats
+                1  # duration, in beats
             ])
         return note_list
 
-    # def week_magic(day):
-    #     day_of_week = day.weekday()
-    #
-    #     to_beginning_of_week = datetime.timedelta(days=day_of_week)
-    #     beginning_of_week = day - to_beginning_of_week
-    #
-    #     to_end_of_week = datetime.timedelta(days=6 - day_of_week)
-    #     end_of_week = day + to_end_of_week
-    #
-    #     return (beginning_of_week, end_of_week)
+    def map_week_to_day(self, year, week_num, desired_day_num=None):
+        ''' Helper for weekly data, so when you jump to a new year you don't have notes playing too close together. Basically returns the first Sunday, Monday, etc. in 0-indexed integer format that is in that week. '''
+        year_start = datetime(int(year), 1, 1).date()
+        year_start_day = year_start.weekday()
+        week_start_date = year_start + timedelta(weeks=1 * (int(week_num) - 1))
+        week_start_day = week_start_date.weekday()
+        if desired_day_num and week_start_day < desired_day_num:
+            return week_start_date + timedelta(days=(desired_day_num - week_start_day))
+        return week_start_date
 
     def csv_to_miditime(self):
         raw_data = self.read_csv('data/coal_prod_1984_2016_weeks_summed.csv')
@@ -90,13 +91,11 @@ class Coal2Midi(object):
 
         self.mymidi = MIDITime(self.tempo, 'coaltest.mid', self.seconds_per_year, self.base_octave, self.octave_range)
 
-        # first_date = filtered_rows[0]
+        first_day = self.map_week_to_day(filtered_data[0]['Year'], filtered_data[0]['Week'])
 
         for r in filtered_data:
-            year_start = datetime(int(r['Year']), 1, 1).date()
-            # print year_start
-            week_start_date = year_start + timedelta(weeks=1 * (int(r['Week']) - 1))
-            # print week_start_date
+            week_start_date = self.map_week_to_day(r['Year'], r['Week'], first_day.weekday())
+            print r['Year'], week_start_date
             days_since_epoch = self.mymidi.days_since_epoch(week_start_date)
             beat = self.mymidi.beat(days_since_epoch)
             # mydict = {'days_since_epoch': int(float(row[0])), 'CoalProdMillions': float(r['CoalProd'] / 1000000)}
@@ -105,7 +104,6 @@ class Coal2Midi(object):
                 'beat': beat,
                 'CoalProdMillions': float(r['CoalProd']) / 1000000.0
             })
-            # processed_data.append(mydict)
 
         note_list = self.make_notes(timed_data, 'CoalProdMillions')
         # Add a track with those notes
@@ -114,35 +112,34 @@ class Coal2Midi(object):
         # Output the .mid file
         self.mymidi.save_midi()
 
-    def mag_to_pitch_tuned(self, magnitude):
+    def data_to_pitch_tuned(self, datapoint):
         # Where does this data point sit in the domain of your data? (I.E. the min magnitude is 3, the max in 5.6). In this case the optional 'True' means the scale is reversed, so the highest value will return the lowest percentage.
-        # print magnitude
-        scale_pct = self.mymidi.linear_scale_pct(0, self.maximum, magnitude)
+        scale_pct = self.mymidi.linear_scale_pct(0, self.maximum, datapoint)
 
         # Another option: Linear scale, reverse order
-        # scale_pct = mymidi.linear_scale_pct(3, 5.7, magnitude, True)
+        # scale_pct = mymidi.linear_scale_pct(0, self.maximum, datapoint, True)
 
         # Another option: Logarithmic scale, reverse order
-        # scale_pct = mymidi.log_scale_pct(3, 5.7, magnitude, True)
+        # scale_pct = mymidi.log_scale_pct(0, self.maximum, datapoint, True)
 
         # Pick a range of notes. This allows you to play in a key.
-        c_major = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
+        mode = self.c_major
 
         #Find the note that matches your data point
-        note = self.mymidi.scale_to_note(scale_pct, c_major)
+        note = self.mymidi.scale_to_note(scale_pct, mode)
 
         #Translate that note to a MIDI pitch
         midi_pitch = self.mymidi.note_to_midi_pitch(note)
 
         return midi_pitch
 
-    def mag_to_attack(self, magnitude):
+    def mag_to_attack(self, datapoint):
         # Where does this data point sit in the domain of your data? (I.E. the min magnitude is 3, the max in 5.6). In this case the optional 'True' means the scale is reversed, so the highest value will return the lowest percentage.
-        scale_pct = self.mymidi.linear_scale_pct(0, self.maximum, magnitude)
+        scale_pct = self.mymidi.linear_scale_pct(0, self.maximum, datapoint)
 
         #max_attack = 10
 
-        adj_attack = (1-scale_pct)*max_attack + 70
+        adj_attack = (1 - scale_pct)*max_attack + 70
         #adj_attack = 100
 
         return adj_attack
