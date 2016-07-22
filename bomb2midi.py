@@ -2,14 +2,12 @@ import os
 import csv
 from datetime import datetime, timedelta
 from miditime.miditime import MIDITime
-# from django.utils.timezone import make_aware, get_default_timezone
 
 
 class bomb2midi(object):
     ''' Submitted by Jennifer LaFleur. '''
 
-    # tz = get_default_timezone()
-    epoch = datetime(1945, 1, 1)
+    epoch = datetime(1945, 1, 1)  # Not actually necessary, but optional to specify your own
     mymidi = None
 
     min_value = 0
@@ -32,7 +30,7 @@ class bomb2midi(object):
     d_minor = ['D', 'E', 'F', 'G', 'A', 'Bb', 'C']
     c_gregorian = ['C', 'D', 'Eb', 'F', 'G', 'Ab', 'A', 'Bb']
 
-    current_key = 'd_minor'
+    current_key = c_major
     base_octave = 2
     octave_range = 5
 
@@ -45,13 +43,6 @@ class bomb2midi(object):
 
     def remove_weeks(self, csv_obj):
         return [r for r in csv_obj if r['Date'] not in ['']]
-
-    def get_data_range(self, data_list, attribute_name):
-        # for d in data_list:
-        #     print d[attribute_name]
-        minimum = min([float(d[attribute_name]) for d in data_list])
-        maximum = max([float(d[attribute_name]) for d in data_list])
-        return [minimum, maximum]
 
     def round_to_quarter_beat(self, input):
         return round(input * 4) / 4
@@ -71,26 +62,16 @@ class bomb2midi(object):
             ])
         return note_list
 
-    def map_week_to_day(self, year, week_num, desired_day_num=None):
-        ''' Helper for weekly data, so when you jump to a new year you don't have notes playing too close together. Basically returns the first Sunday, Monday, etc. in 0-indexed integer format that is in that week. '''
-        year_start = datetime(int(year), 1, 1).date()
-        year_start_day = year_start.weekday()
-        week_start_date = year_start + timedelta(weeks=1 * (int(week_num) - 1))
-        week_start_day = week_start_date.weekday()
-        if desired_day_num and week_start_day < desired_day_num:
-            return week_start_date + timedelta(days=(desired_day_num - week_start_day))
-        return week_start_date
-
     def csv_to_miditime(self):
         raw_data = list(self.read_csv('data/bombs.csv'))
         filtered_data = self.remove_weeks(raw_data)
 
-        self.minimum = self.get_data_range(filtered_data, 'Yieldnum')[0]
-        self.maximum = self.get_data_range(filtered_data, 'Yieldnum')[1]
+        self.mymidi = MIDITime(self.tempo, 'bombtest_log.mid', self.seconds_per_year, self.base_octave, self.octave_range, self.epoch)
+
+        self.minimum = self.mymidi.get_data_range(filtered_data, 'Yieldnum')[0]
+        self.maximum = self.mymidi.get_data_range(filtered_data, 'Yieldnum')[1]
 
         timed_data = []
-
-        self.mymidi = MIDITime(self.tempo, 'bombtest_log.mid', self.seconds_per_year, self.base_octave, self.octave_range)
 
         for r in filtered_data:
             python_date = datetime.strptime(r["Date"], "%m/%d/%Y")
@@ -120,7 +101,7 @@ class bomb2midi(object):
         scale_pct = self.mymidi.log_scale_pct(0, self.maximum, datapoint, True, 'log')
 
         # Pick a range of notes. This allows you to play in a key.
-        mode = self.c_major
+        mode = self.current_key
 
         #Find the note that matches your data point
         note = self.mymidi.scale_to_note(scale_pct, mode)
