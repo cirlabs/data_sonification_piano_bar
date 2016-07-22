@@ -1,1 +1,2 @@
 miditime
+#git+https://github.com/cirlabs/miditime.git@log#egg=miditime

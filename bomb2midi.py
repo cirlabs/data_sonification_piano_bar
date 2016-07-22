@@ -90,18 +90,12 @@ class bomb2midi(object):
 
         timed_data = []
 
-        self.mymidi = MIDITime(self.tempo, 'bombtest.mid', self.seconds_per_year, self.base_octave, self.octave_range)
-
-        # first_day = self.map_week_to_day(filtered_data[0]['Year'], filtered_data[0]['Week'])
+        self.mymidi = MIDITime(self.tempo, 'bombtest_log.mid', self.seconds_per_year, self.base_octave, self.octave_range)
 
         for r in filtered_data:
-            # week_start_date = self.map_week_to_day(r['Year'], r['Week'], first_day.weekday())
-            # print r['Year'], week_start_date
-            print r["Date"]
             python_date = datetime.strptime(r["Date"], "%m/%d/%Y")
             days_since_epoch = self.mymidi.days_since_epoch(python_date)
             beat = self.mymidi.beat(days_since_epoch)
-            # mydict = {'days_since_epoch': int(float(row[0])), 'BombYieldMillions': float(r['Yieldnum'] / 1000000)}
             timed_data.append({
                 'days_since_epoch': days_since_epoch,
                 'beat': beat,
@@ -120,10 +114,10 @@ class bomb2midi(object):
         #scale_pct = self.mymidi.linear_scale_pct(0, self.maximum, datapoint)
 
         # Another option: Linear scale, reverse order
-        scale_pct = self.mymidi.linear_scale_pct(0, self.maximum, datapoint, True)
-
+        # scale_pct = self.mymidi.linear_scale_pct(0, self.maximum, datapoint, True)
+        # print 10**self.maximum
         # Another option: Logarithmic scale, reverse order
-        #scale_pct = self.mymidi.log_scale_pct(0, self.maximum, datapoint,True)
+        scale_pct = self.mymidi.log_scale_pct(0, self.maximum, datapoint, True, 'log')
 
         # Pick a range of notes. This allows you to play in a key.
         mode = self.c_major
@@ -133,6 +127,7 @@ class bomb2midi(object):
 
         #Translate that note to a MIDI pitch
         midi_pitch = self.mymidi.note_to_midi_pitch(note)
+        print scale_pct, note
 
         return midi_pitch
 
