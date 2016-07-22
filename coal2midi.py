@@ -29,7 +29,7 @@ class Coal2Midi(object):
     d_minor = ['D', 'E', 'F', 'G', 'A', 'Bb', 'C']
     c_gregorian = ['C', 'D', 'Eb', 'F', 'G', 'Ab', 'A', 'Bb']
 
-    current_key = 'd_minor'
+    current_key = c_major
     base_octave = 4
     octave_range = 3
 
@@ -52,6 +52,9 @@ class Coal2Midi(object):
     def round_to_quarter_beat(self, input):
         return round(input * 4) / 4
 
+    def round_to_half_beat(self, input):
+        return round(input * 2) / 2
+
     def make_notes(self, data_timed, data_key):
         note_list = []
 
@@ -59,7 +62,8 @@ class Coal2Midi(object):
 
         for d in data_timed:
             note_list.append([
-                self.round_to_quarter_beat(d['beat'] - start_time),
+                # self.round_to_half_beat(d['beat'] - start_time),
+                round(d['beat'] - start_time),
                 self.data_to_pitch_tuned(d[data_key]),
                 100,
                 #mag_to_attack(d['magnitude']),  # attack
@@ -88,7 +92,7 @@ class Coal2Midi(object):
         # scale_pct = mymidi.log_scale_pct(0, self.maximum, datapoint, True)
 
         # Pick a range of notes. This allows you to play in a key.
-        mode = self.c_major
+        mode = self.current_key
 
         #Find the note that matches your data point
         note = self.mymidi.scale_to_note(scale_pct, mode)

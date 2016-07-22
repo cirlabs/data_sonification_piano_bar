@@ -6,10 +6,7 @@ from miditime.miditime import MIDITime
 
 
 class bomb2midi(object):
-    ''' Adapted from Jordan Wirfs-Brock's awesome coal production sonification.
-    Post here: http://insideenergy.org/2016/05/03/listen-to-u-s-coal-production-fall-off-a-cliff/
-    Code and data here: https://github.com/InsideEnergy/Data-for-stories/tree/master/20160503-coal-production-sonification
-    '''
+    ''' Submitted by Jennifer LaFleur. '''
 
     # tz = get_default_timezone()
     epoch = datetime(1945, 1, 1)
@@ -19,8 +16,6 @@ class bomb2midi(object):
     max_value = 5.7
 
     tempo = 120
-    # min_pitch = 40
-    # max_pitch = 88
 
     min_attack = 30
     max_attack = 255
