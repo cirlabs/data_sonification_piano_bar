@@ -43,19 +43,22 @@ class Electricity2Midi(object):
     def round_to_half_beat(self, input):
         return round(input * 2) / 2
 
-    def make_notes(self, data_timed, data_key):
+    def make_notes(self, data_timed, data_key, channel=0):
         note_list = []
 
         start_time = data_timed[0]['beat']
 
         for d in data_timed:
             note_list.append([
-                # self.round_to_half_beat(d['beat'] - start_time),
-                d['beat'] - start_time,
-                self.data_to_pitch_tuned(d[data_key]),
-                100,
-                #mag_to_attack(d['magnitude']),  # attack
-                1  # duration, in beats
+                [
+                    # self.round_to_half_beat(d['beat'] - start_time),
+                    d['beat'] - start_time,
+                    self.data_to_pitch_tuned(d[data_key]),
+                    100,
+                    #mag_to_attack(d['magnitude']),  # attack
+                    1  # duration, in beats
+                ],
+                channel
             ])
         return note_list
 
@@ -91,24 +94,10 @@ class Electricity2Midi(object):
 
         return adj_attack
 
-    # def map_month_to_day(self, year_month):
-    #     return datetime(year, month, 1)
-
-    def csv_to_miditime(self):
-        self.mymidi = MIDITime(self.tempo, 'natural_gas_monthly.mid', self.seconds_per_year, self.base_octave, self.octave_range, self.epoch)
-        filtered_data = list(self.read_csv('data/electricity_sources_monthly.csv'))
-
-        # filtered_data = self.remove_weeks(raw_data)
-
-        self.minimum = self.mymidi.get_data_range(filtered_data, 'Electricity Net Generation From Natural Gas, All Sectors')[0]
-        self.maximum = self.mymidi.get_data_range(filtered_data, 'Electricity Net Generation From Natural Gas, All Sectors')[1]
-
+    def energy_source_to_channel(self, data, attribute_name, channel):
         timed_data = []
 
-        # Get the first day in the dataset, so we can use it's day of the week to anchor our other weekly data.
-        # first_day = self.mymidi.map_week_to_day(filtered_data[0]['Year'], filtered_data[0]['Week'])
-
-        for r in filtered_data:
+        for r in data:
             # Convert the month to a date in that week
             month_start_date = datetime.strptime('%s 1' % (r['Month'],), '%Y %B %d')
             print month_start_date
@@ -121,12 +110,39 @@ class Electricity2Midi(object):
             timed_data.append({
                 'days_since_epoch': days_since_epoch,
                 'beat': beat,
-                'natural_gas': float(r['Electricity Net Generation From Natural Gas, All Sectors'])
+                'datapoint': float(r[attribute_name])
             })
 
-        note_list = self.make_notes(timed_data, 'natural_gas')
+        note_list = self.make_notes(timed_data, 'datapoint', channel)
+        return note_list
+
+    def csv_to_miditime(self):
+        self.mymidi = MIDITime(self.tempo, 'electricity_monthly.mid', self.seconds_per_year, self.base_octave, self.octave_range, self.epoch)
+        filtered_data = list(self.read_csv('data/electricity_sources_monthly.csv'))
+
+        # Find the range of all your data
+
+        nat_gas_min = self.mymidi.get_data_range(filtered_data, 'Electricity Net Generation From Natural Gas, All Sectors')[0]
+        nat_gas_max = self.mymidi.get_data_range(filtered_data, 'Electricity Net Generation From Natural Gas, All Sectors')[1]
+
+        coal_min = self.mymidi.get_data_range(filtered_data, 'Electricity Net Generation From Coal, All Sectors')[0]
+        coal_max = self.mymidi.get_data_range(filtered_data, 'Electricity Net Generation From Coal, All Sectors')[1]
+
+        nuclear_min = self.mymidi.get_data_range(filtered_data, 'Electricity Net Generation From Nuclear Electric Power, All Sectors')[0]
+        nuclear_max = self.mymidi.get_data_range(filtered_data, 'Electricity Net Generation From Nuclear Electric Power, All Sectors')[1]
+
+
+        self.minimum = min([nat_gas_min, coal_min, nuclear_min])
+        self.maximum = max([nat_gas_max, coal_max, nuclear_max])
+
+        natural_gas_notes = self.energy_source_to_channel(filtered_data, 'Electricity Net Generation From Natural Gas, All Sectors', 0)
+
+        coal_notes = self.energy_source_to_channel(filtered_data, 'Electricity Net Generation From Coal, All Sectors', 1)
+
+        nuclear_notes = self.energy_source_to_channel(filtered_data, 'Electricity Net Generation From Nuclear Electric Power, All Sectors', 2)
+
         # Add a track with those notes
-        self.mymidi.add_track(note_list)
+        self.mymidi.add_track(natural_gas_notes + coal_notes + nuclear_notes)
 
         # Output the .mid file
         self.mymidi.save_midi()
