@@ -98,20 +98,21 @@ class Electricity2Midi(object):
         timed_data = []
 
         for r in data:
-            # Convert the month to a date in that week
-            month_start_date = datetime.strptime('%s 1' % (r['Month'],), '%Y %B %d')
-            print month_start_date
-            # week_start_date = self.mymidi.map_week_to_day(r['Year'], r['Week'], first_day.weekday())
-            # To get your date into an integer format, convert that date into the number of days since Jan. 1, 1970
-            days_since_epoch = self.mymidi.days_since_epoch(month_start_date)
-            # Convert that integer date into a beat
-            beat = round(self.mymidi.beat(days_since_epoch) * 2) / 2  # Round to half beat
+            if r[attribute_name]:  # Ignore nulls
+                # Convert the month to a date in that week
+                month_start_date = datetime.strptime('%s 1' % (r['Month'],), '%Y %B %d')
+                print month_start_date
+                # week_start_date = self.mymidi.map_week_to_day(r['Year'], r['Week'], first_day.weekday())
+                # To get your date into an integer format, convert that date into the number of days since Jan. 1, 1970
+                days_since_epoch = self.mymidi.days_since_epoch(month_start_date)
+                # Convert that integer date into a beat
+                beat = round(self.mymidi.beat(days_since_epoch) * 2) / 2  # Round to half beat
 
-            timed_data.append({
-                'days_since_epoch': days_since_epoch,
-                'beat': beat,
-                'datapoint': float(r[attribute_name])
-            })
+                timed_data.append({
+                    'days_since_epoch': days_since_epoch,
+                    'beat': beat,
+                    'datapoint': float(r[attribute_name])
+                })
 
         note_list = self.make_notes(timed_data, 'datapoint', channel)
         return note_list
@@ -122,7 +123,7 @@ class Electricity2Midi(object):
             row = {}
             for key, value in d.iteritems():
                 if value == 'Not Available':
-                    row[key] = 0
+                    row[key] = None
                 else:
                     row[key] = value
                 output.append(row)
