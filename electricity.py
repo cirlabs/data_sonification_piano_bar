@@ -116,9 +116,22 @@ class Electricity2Midi(object):
         note_list = self.make_notes(timed_data, 'datapoint', channel)
         return note_list
 
+    def remove_nulls(self, data_list):
+        output = []
+        for d in data_list:
+            row = {}
+            for key, value in d.iteritems():
+                if value == 'Not Available':
+                    row[key] = 0
+                else:
+                    row[key] = value
+                output.append(row)
+        return output
+
     def csv_to_miditime(self):
         self.mymidi = MIDITime(self.tempo, 'electricity_monthly.mid', self.seconds_per_year, self.base_octave, self.octave_range, self.epoch)
-        filtered_data = list(self.read_csv('data/electricity_sources_monthly.csv'))
+        raw_data = list(self.read_csv('data/electricity_sources_monthly.csv'))
+        filtered_data = self.remove_nulls(raw_data)
 
         # Find the range of all your data
 
@@ -131,15 +144,24 @@ class Electricity2Midi(object):
         nuclear_min = self.mymidi.get_data_range(filtered_data, 'Electricity Net Generation From Nuclear Electric Power, All Sectors')[0]
         nuclear_max = self.mymidi.get_data_range(filtered_data, 'Electricity Net Generation From Nuclear Electric Power, All Sectors')[1]
 
+        solar_min = self.mymidi.get_data_range(filtered_data, 'Electricity Net Generation From Solar/PV, All Sectors')[0]
+        solar_max = self.mymidi.get_data_range(filtered_data, 'Electricity Net Generation From Solar/PV, All Sectors')[1]
 
-        self.minimum = min([nat_gas_min, coal_min, nuclear_min])
-        self.maximum = max([nat_gas_max, coal_max, nuclear_max])
+        wind_min = self.mymidi.get_data_range(filtered_data, "Electricity Net Generation From Wind, All Sectors")[0]
+        wind_max = self.mymidi.get_data_range(filtered_data, "Electricity Net Generation From Wind, All Sectors")[1]
+
+        self.minimum = min([nat_gas_min, coal_min, nuclear_min, solar_min, wind_min])
+        self.maximum = max([nat_gas_max, coal_max, nuclear_max, solar_max, wind_max])
 
         natural_gas_notes = self.energy_source_to_channel(filtered_data, 'Electricity Net Generation From Natural Gas, All Sectors', 0)
 
         coal_notes = self.energy_source_to_channel(filtered_data, 'Electricity Net Generation From Coal, All Sectors', 1)
 
         nuclear_notes = self.energy_source_to_channel(filtered_data, 'Electricity Net Generation From Nuclear Electric Power, All Sectors', 2)
+
+        solar_notes = self.energy_source_to_channel(filtered_data, 'Electricity Net Generation From Solar/PV, All Sectors', 3)
+
+        wind_notes = self.energy_source_to_channel(filtered_data, 'Electricity Net Generation From Wind, All Sectors', 4)
 
         # Add a track with those notes
         self.mymidi.add_track(natural_gas_notes + coal_notes + nuclear_notes)
