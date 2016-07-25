@@ -164,7 +164,7 @@ class Electricity2Midi(object):
         wind_notes = self.energy_source_to_channel(filtered_data, 'Electricity Net Generation From Wind, All Sectors', 4)
 
         # Add a track with those notes
-        self.mymidi.add_track(natural_gas_notes + coal_notes + nuclear_notes)
+        self.mymidi.add_track(natural_gas_notes + coal_notes + nuclear_notes + solar_notes + wind_notes)
 
         # Output the .mid file
         self.mymidi.save_midi()
