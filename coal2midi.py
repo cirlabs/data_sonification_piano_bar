@@ -43,12 +43,6 @@ class Coal2Midi(object):
     def remove_weeks(self, csv_obj):
         return [r for r in csv_obj if int(r['Week']) not in [53]]
 
-    # def get_data_range(self, data_list, attribute_name):
-    #     data_list = list(data_list)  # If the data is still a CSV object, once you loop through it you'll get rewind issues. So coercing to list.
-    #     minimum = min([float(d[attribute_name]) for d in data_list])
-    #     maximum = max([float(d[attribute_name]) for d in data_list])
-    #     return [minimum, maximum]
-
     def round_to_quarter_beat(self, input):
         return round(input * 4) / 4
 
@@ -70,16 +64,6 @@ class Coal2Midi(object):
                 1  # duration, in beats
             ])
         return note_list
-
-    # def map_week_to_day(self, year, week_num, desired_day_num=None):
-    #     ''' Helper for weekly data, so when you jump to a new year you don't have notes playing too close together. Basically returns the first Sunday, Monday, etc. in 0-indexed integer format that is in that week. '''
-    #     year_start = datetime(int(year), 1, 1).date()
-    #     year_start_day = year_start.weekday()
-    #     week_start_date = year_start + timedelta(weeks=1 * (int(week_num) - 1))
-    #     week_start_day = week_start_date.weekday()
-    #     if desired_day_num and week_start_day < desired_day_num:
-    #         return week_start_date + timedelta(days=(desired_day_num - week_start_day))
-    #     return week_start_date
 
     def data_to_pitch_tuned(self, datapoint):
         # Where does this data point sit in the domain of your data? (I.E. the min magnitude is 3, the max in 5.6). In this case the optional 'True' means the scale is reversed, so the highest value will return the lowest percentage.
