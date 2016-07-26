@@ -1,4 +1,5 @@
 JAWS_NOTES = [
+    # [beat, pitch, attack, duration, (plus x octaves), (channel)]
     [0, 'E', 75, 1],
     [1, 'F', 75, 2],
 
