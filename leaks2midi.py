@@ -63,7 +63,7 @@ class bomb2midi(object):
         return note_list
 
     def bigger_boat(self, num_beats):
-        octave = 3
+        octave = 4
         notes = [
             [1, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 1],
             [2, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 2],
@@ -72,16 +72,16 @@ class bomb2midi(object):
             [8, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 1],
             [9, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 2],
 
-            [12, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 1],
-            [13, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 1],
+            [13, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 1],
+            [14, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 1],
 
-            [14, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 1],
-            [15, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 2],
+            [15, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 1],
+            [16, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 2],
 
-            [17, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 0.75],
-            [18, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 0.75],
-            [19, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 0.75],
-            [20, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 0.75],
+            [18, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 0.75],
+            [19, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 0.75],
+            [20, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 0.75],
+            [21, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 0.75],
         ]
 
         return notes
