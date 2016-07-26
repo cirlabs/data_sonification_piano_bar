@@ -21,14 +21,15 @@ class leaks2midi(object):
     octave_range = 5
 
     def __init__(self):
-        self.csv_to_miditime()
+        self.csv_to_miditime('data/keystone_gas_plant.csv', 'keystone_leaks.mid', 3)
+        self.csv_to_miditime('data/waha_gas_plant.csv', 'waha_leaks.mid', 4)
 
     def read_csv(self, filepath):
         csv_file = open(filepath, 'rU')
         return csv.DictReader(csv_file, delimiter=',', quotechar='"')
 
-    def bigger_boat(self, start_beat, num_beats):
-        octave = 3
+    def bigger_boat(self, start_beat, num_beats, miditime_instance, octave):
+        # octave = 3
         raw_notes = [
             [0, 'E', 75, 1],
             [1, 'F', 75, 2],
@@ -153,15 +154,15 @@ class leaks2midi(object):
                 except:
                     channel = 0
                 r[0] += start_beat
-                r[1] = self.mymidi.note_to_midi_pitch(octavated_pitch)
+                r[1] = miditime_instance.note_to_midi_pitch(octavated_pitch)
                 notes.append([[r[0], r[1], r[2], r[3]], channel])
 
         return notes
 
-    def csv_to_miditime(self):
-        raw_data = list(self.read_csv('data/keystone_gas_plant.csv'))
+    def csv_to_miditime(self, infile, outfile, octave):
+        raw_data = list(self.read_csv(infile))
 
-        self.mymidi = MIDITime(self.tempo, 'keystone_leaks.mid', self.seconds_per_year, self.base_octave, self.octave_range, self.epoch)
+        mymidi = MIDITime(self.tempo, outfile, self.seconds_per_year, self.base_octave, self.octave_range, self.epoch)
 
         note_list = []
 
@@ -169,25 +170,25 @@ class leaks2midi(object):
             began_date = datetime.strptime(r["began_date"], "%Y-%m-%d %H:%M:%S+00:00")  # 2009-01-15 16:15:00+00:00
             ended_date = datetime.strptime(r["ended_date"], "%Y-%m-%d %H:%M:%S+00:00")
 
-            began_days_since_epoch = self.mymidi.days_since_epoch(began_date)
-            ended_days_since_epoch = self.mymidi.days_since_epoch(ended_date)
+            began_days_since_epoch = mymidi.days_since_epoch(began_date)
+            ended_days_since_epoch = mymidi.days_since_epoch(ended_date)
 
-            start_beat = self.mymidi.beat(began_days_since_epoch)
-            end_beat = self.mymidi.beat(ended_days_since_epoch)
+            start_beat = mymidi.beat(began_days_since_epoch)
+            end_beat = mymidi.beat(ended_days_since_epoch)
             duration_in_beats = end_beat - start_beat
             if duration_in_beats < 3:
                 duration_in_beats = 3
 
-            print start_beat, duration_in_beats
-            note_list = note_list + self.bigger_boat(round(start_beat), duration_in_beats)
+            # print start_beat, duration_in_beats
+            note_list = note_list + self.bigger_boat(round(start_beat), duration_in_beats, mymidi, octave)
 
         # Just play the whole song
         # note_list = self.bigger_boat(0, 70)
         # Add a track with those notes
-        self.mymidi.add_track(note_list)
+        mymidi.add_track(note_list)
 
         # Output the .mid file
-        self.mymidi.save_midi()
+        mymidi.save_midi()
 
 if __name__ == "__main__":
     mymidi = leaks2midi()
