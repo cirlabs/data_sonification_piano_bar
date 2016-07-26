@@ -1,2 +1,2 @@
-#miditime
-git+https://github.com/cirlabs/miditime.git@master#egg=miditime
+miditime
+#git+https://github.com/cirlabs/miditime.git@master#egg=miditime
