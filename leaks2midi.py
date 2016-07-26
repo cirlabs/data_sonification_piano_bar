@@ -65,23 +65,23 @@ class bomb2midi(object):
     def bigger_boat(self, num_beats):
         octave = 4
         notes = [
-            [1, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 1],
-            [2, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 2],
+            [0, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 1],
+            [1, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 2],
 
-            [7, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 1],
-            [8, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 1],
-            [9, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 2],
+            [6, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 1],
+            [7, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 1],
+            [8, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 2],
 
-            [13, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 1],
-            [14, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 1],
+            [12, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 1],
+            [13, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 1],
 
-            [15, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 1],
-            [16, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 2],
+            [14, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 1],
+            [15, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 2],
 
-            [18, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 0.75],
-            [19, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 0.75],
-            [20, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 0.75],
-            [21, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 0.75],
+            [17, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 0.75],
+            [18, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 0.75],
+            [19, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 0.75],
+            [20, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 0.75],
         ]
 
         return notes
