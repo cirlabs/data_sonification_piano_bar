@@ -46,13 +46,13 @@ class Electricity2Midi(object):
     def make_notes(self, data_timed, data_key, channel=0):
         note_list = []
 
-        start_time = data_timed[0]['beat']
+        # start_time = data_timed[0]['beat']
 
         for d in data_timed:
             note_list.append([
                 [
                     # self.round_to_half_beat(d['beat'] - start_time),
-                    d['beat'] - start_time,
+                    d['beat'],
                     self.data_to_pitch_tuned(d[data_key]),
                     100,
                     #mag_to_attack(d['magnitude']),  # attack
@@ -99,6 +99,7 @@ class Electricity2Midi(object):
 
         for r in data:
             if r[attribute_name]:  # Ignore nulls
+                print r[attribute_name]
                 # Convert the month to a date in that week
                 month_start_date = datetime.strptime('%s 1' % (r['Month'],), '%Y %B %d')
                 print month_start_date
