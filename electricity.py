@@ -56,7 +56,7 @@ class Electricity2Midi(object):
                     self.data_to_pitch_tuned(d[data_key]),
                     100,
                     #mag_to_attack(d['magnitude']),  # attack
-                    1  # duration, in beats
+                    0.5  # duration, in beats
                 ],
                 channel
             ])
@@ -108,6 +108,7 @@ class Electricity2Midi(object):
                 days_since_epoch = self.mymidi.days_since_epoch(month_start_date)
                 # Convert that integer date into a beat
                 beat = round(self.mymidi.beat(days_since_epoch) * 2) / 2  # Round to half beat
+                # beat = round(self.mymidi.beat(days_since_epoch))  # Round to beat
 
                 timed_data.append({
                     'days_since_epoch': days_since_epoch,
@@ -155,9 +156,9 @@ class Electricity2Midi(object):
         self.minimum = min([nat_gas_min, coal_min, nuclear_min, solar_min, wind_min])
         self.maximum = max([nat_gas_max, coal_max, nuclear_max, solar_max, wind_max])
 
-        natural_gas_notes = self.energy_source_to_channel(filtered_data, 'Electricity Net Generation From Natural Gas, All Sectors', 0)
+        coal_notes = self.energy_source_to_channel(filtered_data, 'Electricity Net Generation From Coal, All Sectors', 0)
 
-        coal_notes = self.energy_source_to_channel(filtered_data, 'Electricity Net Generation From Coal, All Sectors', 1)
+        natural_gas_notes = self.energy_source_to_channel(filtered_data, 'Electricity Net Generation From Natural Gas, All Sectors', 1)
 
         nuclear_notes = self.energy_source_to_channel(filtered_data, 'Electricity Net Generation From Nuclear Electric Power, All Sectors', 2)
 
