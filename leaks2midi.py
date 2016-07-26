@@ -63,28 +63,62 @@ class bomb2midi(object):
         return note_list
 
     def bigger_boat(self, num_beats):
-        octave = 4
-        notes = [
-            [0, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 1],
-            [1, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 2],
+        octave = 2
+        raw_notes = [
+            [0, 'E', 75, 1],
+            [1, 'F', 75, 2],
 
-            [6, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 1],
-            [7, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 1],
-            [8, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 2],
+            [6, 'E', 75, 1],
+            [7, 'F', 75, 1],
+            [8, 'E', 75, 2],
 
-            [12, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 1],
-            [13, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 1],
+            [12, 'E', 75, 1],
+            [13, 'F', 75, 1],
 
-            [14, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 1],
-            [15, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 2],
+            [14, 'E', 75, 1],
+            [15, 'F', 75, 2],
 
-            [17, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 0.75],
-            [18, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 0.75],
-            [19, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 75, 0.75],
-            [20, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 75, 0.75],
+            [18, 'E', 75, 0.75],
+            [19, 'F', 75, 0.75],
+            [20, 'E', 75, 0.75],
+            [21, 'F', 75, 0.75],
+            [22, 'E', 75, 0.75],
+            [23, 'F', 75, 0.75],
+            [24, 'E', 75, 0.75],
+            [25, 'F', 75, 0.75],
+
+            [26, 'E', 75, 0.5],
+            [26.5, 'F', 75, 0.5],
+            [27, 'E', 75, 0.5],
+            [27.5, 'F', 75, 0.5],
+            [28, 'E', 75, 0.5],
+            [28.5, 'F', 75, 0.5],
+            [29, 'E', 75, 0.5],
+            [29.5, 'F', 75, 0.5],
+
+            [30, 'E', 75, 0.5],
+            [30.5, 'F', 75, 0.5],
+            [31, 'E', 75, 0.5],
+            [31.5, 'F', 75, 0.5],
+            [32, 'E', 75, 0.5],
+            [32.5, 'F', 75, 0.5],
+            [33, 'E', 75, 0.5],
+            [33.5, 'F', 75, 0.5],
+
+            [34, 'E', 75, 0.5],
+            [34.5, 'F', 75, 0.5],
+            [35, 'E', 75, 0.5],
+            [35.5, 'F', 75, 0.5],
+            [36, 'E', 75, 0.5],
+            [36.5, 'F', 75, 0.5],
+            [37, 'E', 75, 0.5],
+            [37.5, 'F', 75, 0.5],
         ]
+        notes = []
+        for r in raw_notes:
+            r[1] = self.mymidi.note_to_midi_pitch('%s%s' % (r[1], octave,))
 
-        return notes
+        return raw_notes
 
     def csv_to_miditime(self):
         raw_data = list(self.read_csv('data/keystone_gas_plant.csv'))
