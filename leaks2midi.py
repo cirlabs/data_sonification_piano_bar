@@ -134,9 +134,9 @@ class bomb2midi(object):
             [45.5, 'F', 75, 0.5],
 
             # notes over
-            [43, 'G', 75, 0.25, 1],
-            [43.25, 'B', 75, 0.25, 1],
-            [43.5, 'F', 75, 6.5, 2],
+            [43, 'G', 75, 0.25, 1, 1],
+            [43.25, 'B', 75, 0.25, 1, 1],
+            [43.5, 'F', 75, 6.5, 2, 1],
 
             # strings under
             [46, 'E', 75, 0.5],
@@ -158,13 +158,13 @@ class bomb2midi(object):
             [53.5, 'F', 75, 0.5],
 
             # notes over
-            [50.5, 'G', 75, 0.25, 1],
-            [50.75, 'B', 75, 0.25, 1],
-            [51, 'F', 75, 0.25, 2],
-            [51.25, 'G', 75, 0.25, 2],
-            [51.5, 'D', 75, 0.25, 2],
-            [51.75, 'G', 75, 0.25, 1],
-            [52, 'F', 75, 6, 1],
+            [50.5, 'G', 75, 0.25, 1, 1],
+            [50.75, 'B', 75, 0.25, 1, 1],
+            [51, 'F', 75, 0.25, 2, 1],
+            [51.25, 'G', 75, 0.25, 2, 1],
+            [51.5, 'D', 75, 0.25, 2, 1],
+            [51.75, 'G', 75, 0.25, 1, 1],
+            [52, 'F', 75, 6, 1, 1],
 
             # strings under
             [54, 'E', 75, 0.5],
@@ -182,9 +182,14 @@ class bomb2midi(object):
                 octavated_pitch = '%s%s' % (r[1], octave + r[4],)
             except:
                 octavated_pitch = '%s%s' % (r[1], octave,)
+            try:
+                channel = r[5]
+            except:
+                channel = 0
             r[1] = self.mymidi.note_to_midi_pitch(octavated_pitch)
+            notes.append([[r[0], r[1], r[2], r[3]], channel])
 
-        return raw_notes
+        return notes
 
     def csv_to_miditime(self):
         raw_data = list(self.read_csv('data/keystone_gas_plant.csv'))
