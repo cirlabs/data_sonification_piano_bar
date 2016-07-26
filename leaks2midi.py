@@ -63,7 +63,7 @@ class bomb2midi(object):
         return note_list
 
     def bigger_boat(self, num_beats):
-        octave = 2
+        octave = 3
         notes = [
             [1, self.mymidi.note_to_midi_pitch('E%s' % (octave,)), 50, 1],
             [2, self.mymidi.note_to_midi_pitch('F%s' % (octave,)), 50, 2],
