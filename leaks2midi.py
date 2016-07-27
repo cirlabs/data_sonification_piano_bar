@@ -8,7 +8,7 @@ from lib.jaws_notes import JAWS_NOTES
 class leaks2midi(object):
     ''' Submitted by Michael Corey. '''
 
-    epoch = datetime(2009, 1, 1)  # Not actually necessary, but optional to specify your own
+    epoch = datetime(2008, 1, 1)  # Not actually necessary, but optional to specify your own
     mymidi = None
 
     tempo = 120
@@ -16,14 +16,14 @@ class leaks2midi(object):
     min_attack = 30
     max_attack = 255
 
-    seconds_per_year = 48
+    seconds_per_year = 24
 
     base_octave = 2
     octave_range = 5
 
     def __init__(self):
         self.just_jaws('williams.mid')
-        self.csv_to_miditime('data/keystone_gas_plant.csv', 'keystone_leaks.mid', 3)
+        # self.csv_to_miditime('data/keystone_gas_plant.csv', 'keystone_leaks.mid', 3)
         self.csv_to_miditime('data/waha_gas_plant.csv', 'waha_leaks.mid', 4)
 
     def read_csv(self, filepath):
@@ -44,9 +44,9 @@ class leaks2midi(object):
                     channel = r[5]
                 except:
                     channel = 0
-                r[0] += start_beat
-                r[1] = miditime_instance.note_to_midi_pitch(octavated_pitch)
-                notes.append([[r[0], r[1], r[2], r[3]], channel])
+                adjusted_beat = r[0] + start_beat
+                midi_pitch = miditime_instance.note_to_midi_pitch(octavated_pitch)
+                notes.append([[adjusted_beat, midi_pitch, r[2], r[3]], channel])
 
         return notes
 
@@ -76,9 +76,10 @@ class leaks2midi(object):
             start_beat = mymidi.beat(began_days_since_epoch)
             end_beat = mymidi.beat(ended_days_since_epoch)
             duration_in_beats = end_beat - start_beat
+
             if duration_in_beats < 3:
                 duration_in_beats = 3
-
+            # print start_beat, duration_in_beats
             note_list = note_list + self.bigger_boat(round(start_beat), duration_in_beats, mymidi, octave)
 
         # Add a track with those notes
